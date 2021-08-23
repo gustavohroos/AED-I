@@ -70,8 +70,10 @@ char* adicionar(char *nomes){
 }
 
 char* remover(char *nomes){
+    
     char buffer[20];
     int i = 0, size;
+
     printf("\nDigite o nome a ser removido: "); 
     scanf("%s", buffer);
 
