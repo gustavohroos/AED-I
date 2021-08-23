@@ -1,3 +1,3 @@
 # AED-I
-<p>Repositório utilizado para fins acadêmicos.</p><br>
-Submissão das listas propostas na cadeira de Algoritmos e Estrutura de Dados I.
+<p>Repository used for academic purposes.<br>
+Submission of the proposed lists in the Algorithms and Data Structure I class.</p>
