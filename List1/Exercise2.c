@@ -9,7 +9,7 @@ char* remover(char *nomes);
 
 int sizeNomes = 0;
 
-int main(int argc, char const *argv[]) {
+int main(){
 
     int escolha;
     char *nomes;
@@ -102,7 +102,7 @@ char* remover(char *nomes){
     return nomes;
 }
 
-void mostrar(char *nomes, int sizeNomes) {
+void mostrar(char *nomes, int sizeNomes){
 
     if (sizeNomes == 0) {
         printf("\nNão existem nomes cadastrados ainda!\n");
