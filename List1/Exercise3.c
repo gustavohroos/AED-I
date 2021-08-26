@@ -130,20 +130,22 @@ void *remover(void *pBuffer){
                     *(char *)(pBuffer + j + celula*(size-i) + sizeof(int)) = *(char *)(pBuffer
                     + j + celula*(size-i+1) + sizeof(int));
                 }
-                *(int *)(pBuffer+sizeof(char)*10+celula*(size-i) + sizeof(int)) =
-                *(int *)(pBuffer+sizeof(char)*10+celula*(size-i+1) + sizeof(int));
-                *(int *)(pBuffer+sizeof(char)*10+sizeof(int)+celula*(size-i) + sizeof(int)) =
-                *(int *)(pBuffer+sizeof(char)*10+sizeof(int)+celula*(size-i+1) + sizeof(int));
+                *(int *)(pBuffer+sizeof(char) * 10 + celula * (size - i) + sizeof(int)) =
+                *(int *)(pBuffer+sizeof(char) * 10 + celula *(size - i + 1) + sizeof(int));
+                *(int *)(pBuffer+sizeof(char) * 10 + sizeof(int) + celula * (size - i) +
+                sizeof(int)) = *(int *)(pBuffer+sizeof(char) * 10 + sizeof(int) + celula
+                *(size - i + 1) + sizeof(int));
 
                 for(i = i - 1; c < size-1; i--, c++){
                     for(j = 0; j < 10; j++){
                         *(char *)(pBuffer + j + celula*(size-i) + sizeof(int)) = *(char *)(pBuffer
                         + j + celula*(size-i+1) + sizeof(int));
                     }
-                    *(int *)(pBuffer+sizeof(char)*10+celula*(size-i) + sizeof(int)) =
-                    *(int *)(pBuffer+sizeof(char)*10+celula*(size-i+1) + sizeof(int));
-                    *(int *)(pBuffer+sizeof(char)*10+sizeof(int)+celula*(size-i) + sizeof(int)) = 
-                    *(int *)(pBuffer+sizeof(char)*10+sizeof(int)+celula*(size-i+1) + sizeof(int));
+                    *(int *)(pBuffer+sizeof(char) * 10 + celula * (size - i) + sizeof(int)) =
+                    *(int *)(pBuffer+sizeof(char) * 10 + celula * (size - i + 1) + sizeof(int));
+                    *(int *)(pBuffer+sizeof(char) * 10 + sizeof(int) + celula * (size - i) +
+                    sizeof(int)) = *(int *)(pBuffer+sizeof(char) * 10 + sizeof(int) + celula 
+                    * (size - i + 1) + sizeof(int));
                 }
 
             }
