@@ -3,11 +3,11 @@
 #include <stdlib.h>
 
 int menu(void);
-void mostrar(char *nomes, int sizeNomes);
+void mostrar(char *nomes, int sizenomes);
 char* adicionar(char *nomes);
 char* remover(char *nomes);
 
-int sizeNomes = 0;
+int sizenomes = 0;
 
 int main(){
 
@@ -21,13 +21,13 @@ int main(){
         switch (escolha){
             case 1:
                 nomes = adicionar(nomes);
-                sizeNomes++;
+                sizenomes++;
                 break;
             case 2:
                 nomes = remover(nomes);
                 break;
             case 3:
-                mostrar(nomes, sizeNomes);
+                mostrar(nomes, sizenomes);
                 break;
             case 4:
                 free(nomes);
@@ -43,11 +43,11 @@ int menu(void){
 	int escolha = 0;
     
 	do{
-		printf("\n1) Adicionar nome;\n");
-        printf("2) Remover nome;\n");
-		printf("3) Listar;\n");
-		printf("4) Sair.\n");
-		printf("\nPor favor, digite uma escolha: ");
+		printf("\n1) adicionar nome;\n");
+        printf("2) remover nome;\n");
+		printf("3) listar;\n");
+		printf("4) sair.\n");
+		printf("\npor favor, digite uma escolha: ");
         scanf("%d", &escolha);
 	}while(escolha < 1 || escolha > 4);
 	getchar();
@@ -59,7 +59,7 @@ char* adicionar(char *nomes){
 
     char buffer[20];
 
-    printf("\nDigite o nome a ser adicionado: "); 
+    printf("\ndigite o nome a ser adicionado: "); 
     scanf("%s", buffer);
     strcat(buffer, "\n");
 
@@ -74,7 +74,7 @@ char* remover(char *nomes){
     char buffer[20];
     int i = 0, size;
 
-    printf("\nDigite o nome a ser removido: "); 
+    printf("\ndigite o nome a ser removido: "); 
     scanf("%s", buffer);
 
     char *localizador = strstr(nomes, buffer);
@@ -88,30 +88,30 @@ char* remover(char *nomes){
 
         if(size == i){
             nomes = (char *)realloc(nomes, size-i+2);
-            sizeNomes--;
+            sizenomes--;
             return nomes;
         }
         nomes = (char *)realloc(nomes, size-i+1);
 
-        sizeNomes--;
+        sizenomes--;
 
     }else{
-        printf("\nNome não foi encontrado :(\n");
+        printf("\nnome não foi encontrado :(\n");
     }
 
     return nomes;
 }
 
-void mostrar(char *nomes, int sizeNomes){
+void mostrar(char *nomes, int sizenomes){
 
-    if (sizeNomes == 0) {
-        printf("\nNão existem nomes cadastrados ainda!\n");
+    if (sizenomes == 0) {
+        printf("\nnão existem nomes cadastrados ainda!\n");
         return;
     }
 
-    printf("\nNomes cadastrados:\n%s", nomes);
+    printf("\nnomes cadastrados:\n%s", nomes);
 
-    printf("\nPressione Enter para voltar ao menu principal...");
+    printf("\npressione enter para voltar ao menu principal...");
     getchar();
 
     
