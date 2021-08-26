@@ -92,7 +92,6 @@ void *adicionar(void *pBuffer){
     pBuffer = pBuffer + sizeof(int);    
     *(int *)pBuffer = telefone;               
 
-    
     pBuffer = pBuffer - sizeof(int);
     pBuffer = pBuffer - sizeof(char)*10;  
     pBuffer = pBuffer - celula*(size-1);
@@ -136,7 +135,6 @@ void *remover(void *pBuffer){
                 *(int *)(pBuffer+sizeof(char)*10+sizeof(int)+celula*(size-i) + sizeof(int)) =
                 *(int *)(pBuffer+sizeof(char)*10+sizeof(int)+celula*(size-i+1) + sizeof(int));
 
-
                 for(i = i - 1; c < size-1; i--, c++){
                     for(j = 0; j < 10; j++){
                         *(char *)(pBuffer + j + celula*(size-i) + sizeof(int)) = *(char *)(pBuffer
@@ -149,7 +147,6 @@ void *remover(void *pBuffer){
                 }
 
             }
-
 
             pBuffer = (char *)realloc(pBuffer, celula*(size-1)+sizeof(int));
 
@@ -176,7 +173,6 @@ void buscar(void *pBuffer){
     
     printf("digite o nome da pessoa para buscar: ");
     scanf("%s", nome);
-
 
     pBuffer = pBuffer + sizeof(int); 
 
@@ -211,7 +207,6 @@ void listar(void *pBuffer){
     }
 
     printf("pessoas cadastradas: %d\n\n", *(int *)pBuffer);
-
 
     pBuffer = pBuffer + sizeof(int); 
 
