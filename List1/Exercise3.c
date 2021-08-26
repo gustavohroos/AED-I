@@ -47,6 +47,7 @@ int main(){
 }
 
 int menu(void){	
+
 	int escolha = 0;
     
 	do{
@@ -65,17 +66,17 @@ int menu(void){
 
 void *adicionar(void *pBuffer){
 
-    char nome[10], telefone[14];
-    int idade, celula;
+    char nome[10];
+    int idade, telefone, celula;
 
-    celula = sizeof(int)+sizeof(char)*10+sizeof(char)*14;
+    celula = sizeof(int)+sizeof(char)*10+sizeof(int);
 
     printf("\ndigite o nome: ");
     scanf("%s", nome);
     printf("digite a idade: ");
     scanf("%d", &idade);
     printf("digite o telefone: ");
-    scanf("%s", telefone);
+    scanf("%d", &telefone);
 
     pBuffer = (char *)realloc(pBuffer, celula*size+sizeof(int)+1);
 
@@ -86,18 +87,16 @@ void *adicionar(void *pBuffer){
     }
 
     pBuffer = pBuffer + sizeof(char)*10;   
-    *(int *)pBuffer = idade;
+    *(int *)pBuffer = idade;  
 
-    for(int i = 0; i < strlen(telefone)+1; i++){
-        *(char *)(pBuffer + i) = telefone[i];
-    }               
+    pBuffer = pBuffer + sizeof(int);    
+    *(int *)pBuffer = telefone;               
 
     
     pBuffer = pBuffer - sizeof(int);
     pBuffer = pBuffer - sizeof(char)*10;  
     pBuffer = pBuffer - celula*(size-1);
-    pBuffer = pBuffer - sizeof(char)*14;  
-    pBuffer = pBuffer - celula*(size-1);
+    pBuffer = pBuffer - sizeof(int);
 
     return pBuffer;
 }
@@ -112,7 +111,7 @@ void *remover(void *pBuffer){
         return pBuffer;
     }
 
-    celula = sizeof(int)+sizeof(char)*10+sizeof(char)*14;
+    celula = sizeof(int)+sizeof(char)*10+sizeof(int);
 
     printf("digite o nome da pessoa para excluir: ");
     scanf("%s", nome);
@@ -128,25 +127,28 @@ void *remover(void *pBuffer){
             if(c != size){
 
                 for(j = 0; j < 10; j++){
-                    *(char *)(pBuffer + j + celula*(size-i) + sizeof(int)) = *(char *)(pBuffer + j + celula*(size-i+1) + sizeof(int));
+                    *(char *)(pBuffer + j + celula*(size-i) + sizeof(int)) = *(char *)(pBuffer
+                    + j + celula*(size-i+1) + sizeof(int));
                 }
-                *(int *)(pBuffer+sizeof(char)*10+celula*(size-i) + sizeof(int)) = *(int *)(pBuffer+sizeof(char)*10+celula*(size-i+1) + sizeof(int));
-                for(j = 0; j < 14; j++){
-                    *(char *)(pBuffer + j + sizeof(char)*10+sizeof(int) + celula*(size-i) + sizeof(int)) = *(char *)(pBuffer + j + sizeof(char)*10+sizeof(int) + celula*(size-i+1) + sizeof(int));
-                }
+                *(int *)(pBuffer+sizeof(char)*10+celula*(size-i) + sizeof(int)) =
+                *(int *)(pBuffer+sizeof(char)*10+celula*(size-i+1) + sizeof(int));
+                *(int *)(pBuffer+sizeof(char)*10+sizeof(int)+celula*(size-i) + sizeof(int)) =
+                *(int *)(pBuffer+sizeof(char)*10+sizeof(int)+celula*(size-i+1) + sizeof(int));
 
 
                 for(i = i - 1; c < size-1; i--, c++){
                     for(j = 0; j < 10; j++){
-                        *(char *)(pBuffer + j + celula*(size-i) + sizeof(int)) = *(char *)(pBuffer + j + celula*(size-i+1) + sizeof(int));
+                        *(char *)(pBuffer + j + celula*(size-i) + sizeof(int)) = *(char *)(pBuffer
+                        + j + celula*(size-i+1) + sizeof(int));
                     }
-                    *(int *)(pBuffer+sizeof(char)*10+celula*(size-i) + sizeof(int)) = *(int *)(pBuffer+sizeof(char)*10+celula*(size-i+1) + sizeof(int));
-                    for(j = 0; j < 14; j++){
-                        *(char *)(pBuffer + j + sizeof(char)*10 + sizeof(int) + celula*(size-i) + sizeof(int)) = *(char *)(pBuffer + j + sizeof(char)*10 + sizeof(int) + celula*(size-i+1) + sizeof(int));
-                    }
+                    *(int *)(pBuffer+sizeof(char)*10+celula*(size-i) + sizeof(int)) =
+                    *(int *)(pBuffer+sizeof(char)*10+celula*(size-i+1) + sizeof(int));
+                    *(int *)(pBuffer+sizeof(char)*10+sizeof(int)+celula*(size-i) + sizeof(int)) = 
+                    *(int *)(pBuffer+sizeof(char)*10+sizeof(int)+celula*(size-i+1) + sizeof(int));
                 }
 
             }
+
 
             pBuffer = (char *)realloc(pBuffer, celula*(size-1)+sizeof(int));
 
@@ -160,7 +162,7 @@ void *remover(void *pBuffer){
 }
 
 void buscar(void *pBuffer){
-    
+
     char nome[10], aux[10];
     int celula, i = 0, c = 0, k = 0;
 
@@ -184,12 +186,15 @@ void buscar(void *pBuffer){
         }
         if(strcmp(aux, nome) == 0){
             printf("\n[%d]: \tnome: ", c);
-            for (k = 0; *(char *)(pBuffer + k + celula*(size-i)) >= 'a' && *(char *)(pBuffer + celula*(size-i) + k) <= 'z'; k++){
-                printf("%c", *(char *)(pBuffer + celula*(size-i) + k));
+            for (k = 0; *(char *)(pBuffer + k + celula*(size - i)) >= 'a' && *(char *)(pBuffer +
+            celula*(size - i) + k) <= 'z'; k++){
+                printf("%c", *(char *)(pBuffer + celula*(size - i) + k));
             }
-            printf("\tidade: %d", *(int *)(pBuffer+sizeof(char)*10+celula*(size-i)));
+            printf("\tidade: %d", *(int *)(pBuffer+sizeof(char) * 10 + celula * (size-i)));
             printf("     telefone: ");
-            for (k = 0; *(char *)(pBuffer + k + sizeof(char)*10 + sizeof(int) + celula*(size-i) + sizeof(int)) >= '0' && *(char *)(pBuffer + k + sizeof(char)*10 + sizeof(int) + celula*(size-i) + sizeof(int) + k) <= '9'; k++){
+            for (k = 0; *(char *)(pBuffer + k + sizeof(char) * 10 + sizeof(int) + celula*(size - i)
+            + sizeof(int)) >= '0' && *(char *)(pBuffer + k + sizeof(char) * 10 + sizeof(int) +
+            celula*(size - i) + sizeof(int) + k) <= '9'; k++){
                 printf("%c", *(char *)(pBuffer + celula*(size-i) + k));
             }
             printf("\n\n");
@@ -198,29 +203,30 @@ void buscar(void *pBuffer){
 }
 
 void listar(void *pBuffer){
+
     int celula, i = 0, c = 0, k = 0;
     
-    celula = sizeof(int)*2+sizeof(char)*10;
+    celula = sizeof(int) * 2 + sizeof(char) * 10;
 
     if(size == 0){
-        printf("\nNo data yet!\n");
+        printf("\nnenhum nome cadastrado\n");
         return;
     }
-    printf("Size: %d\n\n", *(int *)pBuffer);
+
+    printf("pessoas cadastradas: %d\n\n", *(int *)pBuffer);
 
 
     pBuffer = pBuffer + sizeof(int); 
 
     for(i = size, c = 0; c < size; i--, c++){
-        printf("%d: \tnome: ", c);
-        for (k = 0; *(char *)(pBuffer + k + celula*(size-i)) >= 'a' && *(char *)(pBuffer + celula*(size-i) + k) <= 'z'; k++){
-            printf("%c", *(char *)(pBuffer + celula*(size-i) + k));
+        printf("%d:   nome: ", c);
+        for(k = 0; *(char *)(pBuffer + k + celula*(size-i)) >= 'a' && *(char *)(pBuffer + k +
+        celula * (size - i)) <= 'z'; k++){
+            printf("%c", *(char *)(pBuffer + k + celula*(size-i)));
         }
-        printf("\tidade: %d", *(int *)(pBuffer+sizeof(char)*10+celula*(size-i)));
-        printf("     telefone: ");
-        for (k = 0; *(char *)(pBuffer + k + sizeof(char)*10 + sizeof(int) + celula*(size-i) + sizeof(int)) >= '0' && *(char *)(pBuffer + k + sizeof(char)*10 + sizeof(int) + celula*(size-i) + sizeof(int) + k) <= '9'; k++){
-            printf("%c", *(char *)(pBuffer + celula*(size-i) + k));
-        }
+
+        printf("   idade: %d   telefone: %d\n\n", *(int *)(pBuffer+sizeof(char) * 10 + celula *
+        (size - i)), *(int *)(pBuffer+sizeof(char) * 10 + sizeof(int) + celula * (size - i)));
         printf("\n\n");
     }
 }
