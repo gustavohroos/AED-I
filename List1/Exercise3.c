@@ -187,18 +187,14 @@ void buscar(void *pBuffer){
         }
         if(strcmp(aux, nome) == 0){
             printf("\n[%d]: \tnome: ", c);
-            for (k = 0; *(char *)(pBuffer + k + celula*(size - i)) >= 'a' && *(char *)(pBuffer +
-            celula*(size - i) + k) <= 'z'; k++){
-                printf("%c", *(char *)(pBuffer + celula*(size - i) + k));
-            }
-            printf("\tidade: %d", *(int *)(pBuffer+sizeof(char) * 10 + celula * (size-i)));
-            printf("     telefone: ");
-            for (k = 0; *(char *)(pBuffer + k + sizeof(char) * 10 + sizeof(int) + celula*(size - i)
-            + sizeof(int)) >= '0' && *(char *)(pBuffer + k + sizeof(char) * 10 + sizeof(int) +
-            celula*(size - i) + sizeof(int) + k) <= '9'; k++){
-                printf("%c", *(char *)(pBuffer + celula*(size-i) + k));
-            }
-            printf("\n\n");
+            for(k = 0; *(char *)(pBuffer + k + celula*(size-i)) >= 'a' && *(char *)(pBuffer + k +
+            celula * (size - i)) <= 'z'; k++){
+            printf("%c", *(char *)(pBuffer + k + celula*(size-i)));
+        }
+
+        printf("   idade: %d   telefone: %d\n\n", *(int *)(pBuffer+sizeof(char) * 10 + celula *
+        (size - i)), *(int *)(pBuffer+sizeof(char) * 10 + sizeof(int) + celula * (size - i)));
+        printf("\n\n");
         }
     }
 }
