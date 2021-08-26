@@ -69,7 +69,7 @@ void *adicionar(void *pBuffer){
     char nome[10];
     int idade, telefone, celula;
 
-    celula = sizeof(int)+sizeof(char)*10+sizeof(int);
+    celula = sizeof(int) + sizeof(char) * 10 + sizeof(int);
 
     printf("\ndigite o nome: ");
     scanf("%s", nome);
@@ -78,7 +78,7 @@ void *adicionar(void *pBuffer){
     printf("digite o telefone: ");
     scanf("%d", &telefone);
 
-    pBuffer = (char *)realloc(pBuffer, celula*size+sizeof(int)+1);
+    pBuffer = (char *)realloc(pBuffer, celula * size+sizeof(int) + 1);
 
     pBuffer = pBuffer + sizeof(int);  
     pBuffer = pBuffer + celula*(size-1);
@@ -111,10 +111,11 @@ void *remover(void *pBuffer){
         return pBuffer;
     }
 
-    celula = sizeof(int)+sizeof(char)*10+sizeof(int);
+    celula = sizeof(int) + sizeof(char) * 10 + sizeof(int);
 
     printf("digite o nome da pessoa para excluir: ");
     scanf("%s", nome);
+    printf("\n\n");
 
     for(i = size, c = 1; c < size+1; i--, c++){
 
