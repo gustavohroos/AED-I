@@ -8,7 +8,8 @@ void *remover(void *pBuffer);
 void listar(void *pBuffer);
 void buscar(void *pBuffer);
 
-int size = 0;
+int size = 0; //variavel global para contar quantos indivíduos foram cadastrados no total, para
+            //ser utilizada nos laços de repetição
  
 int main(){
 
@@ -64,7 +65,8 @@ int menu(void){
 	return escolha;
 }
 
-void *adicionar(void *pBuffer){
+void *adicionar(void *pBuffer){ //função para adicionar o buffer uma celula com o conteudo nome 
+                                //idade e telefone do indivíduo
 
     char nome[10];
     int idade, telefone, celula;
@@ -100,7 +102,7 @@ void *adicionar(void *pBuffer){
     return pBuffer;
 }
 
-void *remover(void *pBuffer){
+void *remover(void *pBuffer){ //função para remover a celula do indivíduo do buffer
 
     char nome[10], aux[10];
     int celula, i, c, k, j;
@@ -161,7 +163,7 @@ void *remover(void *pBuffer){
     return pBuffer;
 }
 
-void buscar(void *pBuffer){
+void buscar(void *pBuffer){ //função para buscar no buffer a célula com o conteúdo do indivíduo
 
     char nome[10], aux[10];
     int celula, i = 0, c = 0, k = 0;
@@ -197,7 +199,8 @@ void buscar(void *pBuffer){
     }
 }
 
-void listar(void *pBuffer){
+void listar(void *pBuffer){ //semelhante à função buscar, lista todas as células de todos
+                            //indivíduos
 
     int celula, i = 0, c = 0, k = 0;
     
