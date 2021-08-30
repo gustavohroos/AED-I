@@ -1,3 +1,6 @@
+// bibliografia: https://www.geeksforgeeks.org/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -186,7 +189,7 @@ void buscar(void *pBuffer){ //função para buscar no buffer a célula com o con
             aux[k] = *(char *)(pBuffer + celula*(size-i) + k);
         }
         if(strcmp(aux, nome) == 0){
-            printf("\n[%d]: \tnome: ", c);
+            printf("\n%d: \tnome: ", c);
             for(k = 0; *(char *)(pBuffer + k + celula*(size-i)) >= 'a' && *(char *)(pBuffer + k +
             celula * (size - i)) <= 'z'; k++){
             printf("%c", *(char *)(pBuffer + k + celula*(size-i)));

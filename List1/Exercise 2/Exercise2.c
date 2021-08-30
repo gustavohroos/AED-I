@@ -1,3 +1,6 @@
+// bibliografia: https://www.geeksforgeeks.org/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/
+
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
