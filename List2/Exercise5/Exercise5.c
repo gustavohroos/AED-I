@@ -20,7 +20,7 @@ int main(){
     {
         printf("\n\t#####__ARMAZENANDO INFORMAÇÕES__#####");
         printf("\n\tDigite o nome do indivíduo: ");
-        scanf("%[^\n]%*c", (ponteiro_pessoa+size)->nome);
+        scanf("%[^\n]%*c", (ponteiro_pessoa+size)->nome); // "%[^\n]%*c" para adicionar nomes compostos
         printf("\n\tDigite a idade do indivíduo: ");
         scanf("%d", &(ponteiro_pessoa+size)->idade);
         printf("\n\tDigite a altura do indivíduo: ");
@@ -41,5 +41,6 @@ int main(){
         (ponteiro_pessoa + i)->nome, (ponteiro_pessoa + i)->idade, (ponteiro_pessoa + i)->altura);
     }
     
+    free(ponteiro_pessoa);
     return 0;
 }
