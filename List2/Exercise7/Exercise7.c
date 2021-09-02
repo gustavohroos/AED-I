@@ -2,49 +2,48 @@
 #include <stdlib.h>
 #include <string.h>
 #define PESSOAS_MAX 10
-#define NOMES_MAX 30
+#define NOME_MAX 30
+#define TELEFONE_MAX 30
 
-int menu(void);
-void *adicionar(void *pBuffer);
+int menu(void *pBuffer);
+void adicionar(void *pBuffer);
 void *remover(void *pBuffer);
 void listar(void *pBuffer);
-void buscar(void *pBuffer);
+void *buscar(void *pBuffer);
 
 typedef struct
 {
-    char nome[NOMES_MAX];
+    char nome[NOME_MAX];
+    char telefone[TELEFONE_MAX];
     int idade;
 } Pessoa;
 
-
 Pessoa maximo[PESSOAS_MAX];
-
-int size = 0; //variavel global para contar quantos indivíduos foram cadastrados no total, para
-            //ser utilizada nos laços de repetição
  
 int main(){
 
     void *pBuffer;
     int escolha;
 
-    pBuffer = (void *)calloc(1, sizeof(int));
+    pBuffer = (void *)calloc(3, sizeof(int));
+    if (!pBuffer){
+        printf("Erro! Falta de memória\n");
+        return -1;
+    }
 
-    *(int *)pBuffer = size;
+    *(int *)(pBuffer + sizeof(int)) = 0;
 
     for(;;){
-        escolha = menu();
+        *(int *)pBuffer = menu(pBuffer);
         switch (escolha){
             case 1:
-                size++;
-                *(int *)pBuffer = size;
-                pBuffer = adicionar(pBuffer);
+                adicionar(pBuffer);
                 break;
             case 2:
                 pBuffer = remover(pBuffer);
-                *(int *)pBuffer = size;
                 break;
             case 3:
-                buscar(pBuffer);
+                pBuffer = buscar(pBuffer);
                 break;
             case 4:
                 listar(pBuffer);
@@ -58,7 +57,7 @@ int main(){
     return 0;
 }
 
-int menu(void){	
+int menu(void *pBuffer){	
 
 	int escolha = 0;
     
@@ -70,60 +69,37 @@ int menu(void){
 		printf("5 - sair do programa.\n");
 		printf("\nsua escolha: "); 
         scanf("%d", &escolha);
-	}while(escolha < 1 || escolha > 5);
+	}while(*(int *)pBuffer < 1 || *(int *)pBuffer > 5);
 	getchar();
 
-	return escolha;
+	return *(int *)pBuffer;
 }
 
-void *adicionar(void *pBuffer){ //função para adicionar o buffer uma celula com o conteudo nome 
+void adicionar(void *pBuffer){ //função para adicionar o buffer uma celula com o conteudo nome 
                                 //idade e telefone do indivíduo
-
-    char nome[10];
-    int idade, telefone, celula;
-
-    celula = sizeof(int) + sizeof(char) * 10 + sizeof(int);
-
-    printf("\ndigite o nome: ");
-    scanf("%s", nome);
-    printf("digite a idade: ");
-    scanf("%d", &idade);
-    printf("digite o telefone: ");
-    scanf("%d", &telefone);
-
-    pBuffer = (char *)realloc(pBuffer, celula * size+sizeof(int) + 1);
-
-    pBuffer = pBuffer + sizeof(int);  
-    pBuffer = pBuffer + celula*(size-1);
-    for(int i = 0; i < strlen(nome)+1; i++){
-        *(char *)(pBuffer + i) = nome[i];
+    if(*(int *)(pBuffer + sizeof(int)) >= 10){
+        printf("Erro! Não há mais espaço\n");
+        return;
     }
 
-    pBuffer = pBuffer + sizeof(char)*10;   
-    *(int *)pBuffer = idade;  
+    printf("\ndigite o nome: ");
+    scanf("%s", (maximo + *(int *)(pBuffer + sizeof(int)))->nome);
+    printf("digite a idade: ");
+    scanf("%d", &(maximo + *(int *)(pBuffer + sizeof(int)))->idade);
+    printf("digite o telefone: ");
+    scanf("%s", (maximo + *(int *)(pBuffer + sizeof(int)))->telefone);
 
-    pBuffer = pBuffer + sizeof(int);    
-    *(int *)pBuffer = telefone;               
-
-    pBuffer = pBuffer - sizeof(int);
-    pBuffer = pBuffer - sizeof(char)*10;  
-    pBuffer = pBuffer - celula*(size-1);
-    pBuffer = pBuffer - sizeof(int);
+    *(int *)(pBuffer + sizeof(int)) = *(int *)(pBuffer + sizeof(int)) + 1;
 
     return pBuffer;
 }
 
 void *remover(void *pBuffer){ //função para remover a celula do indivíduo do buffer
 
-    char nome[10], aux[10];
-    int celula, i, c, k, j;
-
-    if(size == 0){
-        printf("\nnenhum nome cadastrado\n");
+    if(*(int *)(pBuffer + sizeof(int)) == 0){
+        printf("Erro! Nenhum nome cadastrado até agora\n");
         return pBuffer;
     }
-
-    celula = sizeof(int) + sizeof(char) * 10 + sizeof(int);
 
     printf("digite o nome da pessoa para excluir: ");
     scanf("%s", nome);
@@ -174,16 +150,11 @@ void *remover(void *pBuffer){ //função para remover a celula do indivíduo do 
     return pBuffer;
 }
 
-void buscar(void *pBuffer){ //função para buscar no buffer a célula com o conteúdo do indivíduo
+void *buscar(void *pBuffer){ //função para buscar no buffer a célula com o conteúdo do indivíduo
 
-    char nome[10], aux[10];
-    int celula, i = 0, c = 0, k = 0;
-
-    celula = sizeof(int)*2+sizeof(char)*10;
-
-    if(size == 0){
-        printf("\nnenhum nome cadastrado\n");
-        return;
+    if(*(int *)(pBuffer + sizeof(int)) == 0){
+        printf("Erro! Nenhum nome cadastrado até agora\n");
+        return pBuffer;
     }
     
     printf("digite o nome da pessoa para buscar: ");
