@@ -18,24 +18,24 @@ typedef struct
     int idade;
 } Pessoa;
 
-Pessoa maximo[PESSOAS_MAX];
+Pessoa maximo[PESSOAS_MAX] = {};
  
 int main(){
 
     void *pBuffer;
-    int escolha;
 
     pBuffer = (void *)calloc(3, sizeof(int));
+
     if (!pBuffer){
         printf("Erro! Falta de memória\n");
         return -1;
     }
 
-    *(int *)(pBuffer + sizeof(int)) = 0;
+    *(int *)(pBuffer) = 0;
 
     for(;;){
         *(int *)pBuffer = menu(pBuffer);
-        switch (escolha){
+        switch (*(int *)pBuffer){
             case 1:
                 adicionar(pBuffer);
                 break;
@@ -152,17 +152,22 @@ void *remover(void *pBuffer){ //função para remover a celula do indivíduo do 
 
 void *buscar(void *pBuffer){ //função para buscar no buffer a célula com o conteúdo do indivíduo
 
-    if(*(int *)(pBuffer + sizeof(int)) == 0){
+    int *size = pBuffer;
+
+    if(*(int *)(pBuffer) == 0){
         printf("Erro! Nenhum nome cadastrado até agora\n");
         return pBuffer;
     }
+
+    pBuffer = (void *)realloc(pBuffer, sizeof(int) * 3 + sizeof(char) * NOME_MAX);
     
     printf("digite o nome da pessoa para buscar: ");
-    scanf("%s", nome);
+    scanf("%s", (char *)(pBuffer+sizeof(int)*3));
 
-    pBuffer = pBuffer + sizeof(int); 
+   
+    int *i = (pBuffer + sizeof(int) + sizeof(char) + sizeof(int));
 
-    for(i = size, c = 0; c < size; i--, c++){
+    for(*i = 0, *i < *size; c < size; i--, c++){
 
         for(k = 0; k < strlen(nome)+1; k++){
             aux[k] = *(char *)(pBuffer + celula*(size-i) + k);
@@ -184,8 +189,6 @@ void *buscar(void *pBuffer){ //função para buscar no buffer a célula com o co
 void listar(void *pBuffer){ //semelhante à função buscar, lista todas as células de todos
                             //indivíduos
 
-    int celula, i = 0, c = 0, k = 0;
-    
     celula = sizeof(int) * 2 + sizeof(char) * 10;
 
     if(size == 0){
