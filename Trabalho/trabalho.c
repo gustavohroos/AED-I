@@ -1,15 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define PESSOAS_MAX 10
+
 #define NOME_MAX 20
 #define TELEFONE_MAX 14
-
-int menu(void *pBuffer);
-void adicionar(void *pBuffer);
-void *remover(void *pBuffer);
-void listar(void *pBuffer);
-void *buscar(void *pBuffer);
 
 typedef struct
 {
@@ -18,12 +12,31 @@ typedef struct
     int idade;
 } Pessoa;
 
-Pessoa maximo[PESSOAS_MAX] = {};
+typedef struct Celula *Lista;
+
+struct Celula
+{
+    struct Celula *anterior;
+    Pessoa informaçoes;
+    struct Celula *proximo;
+}
+
+typedef struct Celula Celula;
+
+Lista *pIni;
+
+void *pBuffer = NULL;
+
+Lista *CriarLista();
+
+int menu(Lista *pIni, void *pBuffer);
+void adicionar(Lista *pIni, void *pBuffer);
+void remover(Lista *pIni, void *pBuffer);
+void listar(Lista *pIni);
+void buscar(Lista *pIni, void *pBuffer);
 
 int main()
 {
-
-    void *pBuffer;
 
     pBuffer = (void *)calloc(3, sizeof(int));
 
@@ -61,6 +74,29 @@ int main()
     return 0;
 }
 
+Lista *criarLista()
+{
+    Lista *pIni = (Lista *)malloc(sizeof(Lista));
+    if (pIni != NULL)
+        *pIni = NULL;
+    return pIni;
+}
+
+void limparLista(Lista *pIni)
+{
+    if (pIni != NULL)
+    {
+        Celula *celula;
+        while ((*pIni) != NULL)
+        {
+            celula = *pIni;
+            *pIni = (*pIni)->proximo;
+            free(celula);
+        }
+        free(pIni);
+    }
+}
+
 int menu(void *pBuffer)
 {
 
@@ -79,27 +115,62 @@ int menu(void *pBuffer)
     return *(int *)pBuffer;
 }
 
-void adicionar(void *pBuffer)
-{ //função para adicionar o buffer uma celula com o conteudo nome
-    //idade e telefone do indivíduo
-    if (*(int *)(pBuffer + sizeof(int)) >= 10)
+void inserirDadosOrdenados(Lista *pIni, void *pBuffer)
+{
+    if (pIni != NULL)
     {
-        printf("Erro! Não há mais espaço\n");
-        return;
+        Celula *celula = (celula *)malloc(sizeof(celula));
+        if (celula != NULL)
+        {
+            celula->infos = *(Pessoa *)pBuffer;
+
+            if ((*pIni) == NULL)
+            {
+                celula->anterior = NULL;
+                celula->proximo = NULL;
+                *pIni = celula;
+            }
+            else
+            {
+                Celula *anterior, *atual = *pIni;
+                if ((*(int *)(pBuffer + sizeof(Pessoa) + (sizeof(char) * 10))) == 1)
+                {
+                    while (atual != NULL && strcmp(atual->infos.nome, (*(Pessoa *)pBuffer).nome) < 0)
+                    {
+                        anterior = atual;
+                        atual = atual->proximo;
+                    }
+                }
+                else
+                {
+                    while (atual != NULL && atual->infos.idade < (*(Pessoa *)pBuffer).idade)
+                    {
+                        anterior = atual;
+                        atual = atual->proximo;
+                    }
+                }
+
+                if (atual == *pIni)
+                {
+                    celula->anterior = NULL;
+                    (*pIni)->anterior = celula;
+                    celula->proximo = (*pIni);
+                    *pIni = celula;
+                }
+                else
+                {
+                    celula->proximo = anterior->proximo;
+                    celula->anterior = anterior;
+                    anterior->proximo = celula;
+                    if (atual != NULL)
+                        atual->anterior = celula;
+                }
+            }
+        }
     }
-
-    printf("\nDigite o nome: ");
-    scanf("%s", (maximo + *(int *)(pBuffer + sizeof(int)))->nome);
-    printf("Digite a idade: ");
-    scanf("%d", &(maximo + *(int *)(pBuffer + sizeof(int)))->idade);
-    printf("Digite o telefone: ");
-    scanf("%s", (maximo + *(int *)(pBuffer + sizeof(int)))->telefone);
-
-    *(int *)(pBuffer + sizeof(int)) = *(int *)(pBuffer + sizeof(int)) + 1;
 }
-
 void *remover(void *pBuffer)
-{ //função para remover a celula do indivíduo do buffer
+{
 
     if (*(int *)(pBuffer + sizeof(int)) == 0)
     {
@@ -107,30 +178,34 @@ void *remover(void *pBuffer)
         return pBuffer;
     }
 
-    pBuffer = (void *)realloc(pBuffer, sizeof(int) * 3 + sizeof(char) * NOME_MAX + sizeof(char) *
-    TELEFONE_MAX);
+    pBuffer = (void *)realloc(pBuffer, sizeof(int) * 3 + sizeof(char) * NOME_MAX + sizeof(char) * TELEFONE_MAX);
 
     printf("Digite o nome da pessoa para excluir: ");
     scanf("%s", (char *)(pBuffer + sizeof(int) * 3));
     printf("\n\n");
 
     for (*(int *)(pBuffer + sizeof(int) * 2) = 0; *(int *)(pBuffer + sizeof(int) * 2) <
-    *(int *)(pBuffer + sizeof(int)); *(int *)(pBuffer + sizeof(int) * 2) =
-    *(int *)(pBuffer + sizeof(int) * 2) + 1)
+                                                  *(int *)(pBuffer + sizeof(int));
+         *(int *)(pBuffer + sizeof(int) * 2) =
+             *(int *)(pBuffer + sizeof(int) * 2) + 1)
     {
 
         if (strcmp((char *)(pBuffer + sizeof(int) * 3), (maximo + *(int *)(pBuffer +
-        sizeof(int) * 2))->nome) == 0)
+                                                                           sizeof(int) * 2))
+                                                            ->nome) == 0)
         {
             for (; *(int *)(pBuffer + sizeof(int) * 2) < (*(int *)(pBuffer + sizeof(int)) - 1);
-            *(int *)(pBuffer + sizeof(int) * 2) = *(int *)(pBuffer + sizeof(int) * 2) + 1)
+                 *(int *)(pBuffer + sizeof(int) * 2) = *(int *)(pBuffer + sizeof(int) * 2) + 1)
             {
                 strcpy((maximo + *(int *)(pBuffer + sizeof(int) * 2))->nome, (maximo + 1 +
-                *(int *)(pBuffer + sizeof(int) * 2))->nome);
+                                                                              *(int *)(pBuffer + sizeof(int) * 2))
+                                                                                 ->nome);
                 (maximo + *(int *)(pBuffer + sizeof(int) * 2))->idade = (maximo + 1 +
-                *(int *)(pBuffer + sizeof(int) * 2))->idade;
+                                                                         *(int *)(pBuffer + sizeof(int) * 2))
+                                                                            ->idade;
                 strcpy((maximo + *(int *)(pBuffer + sizeof(int) * 2))->telefone, (maximo + 1 +
-                *(int *)(pBuffer + sizeof(int) * 2))->telefone);
+                                                                                  *(int *)(pBuffer + sizeof(int) * 2))
+                                                                                     ->telefone);
             }
 
             *(int *)(pBuffer + sizeof(int)) = *(int *)(pBuffer + sizeof(int)) - 1;
@@ -142,57 +217,39 @@ void *remover(void *pBuffer)
     return pBuffer;
 }
 
-void *buscar(void *pBuffer)
-{ //função para buscar no buffer a célula com o conteúdo do indivíduo
-
-    if (*(int *)(pBuffer) == 0)
+void buscar(Lista *pIni, void *pBuffer)
+{
+    if (pIni != NULL)
     {
-        printf("\nErro! Nenhum nome cadastrado até agora\n");
-        return pBuffer;
-    }
-
-    pBuffer = (void *)realloc(pBuffer, sizeof(int) * 3 + sizeof(char) * NOME_MAX);
-
-    printf("\nDigite o nome da pessoa para buscar: ");
-    scanf("%s", (char *)(pBuffer + sizeof(int) * 3));
-
-    for (*(int *)(pBuffer + sizeof(int) * 2) = 0; *(int *)(pBuffer + sizeof(int) * 2) <
-    *(int *)(pBuffer + sizeof(int)); *(int *)(pBuffer + sizeof(int) * 2) += 1)
-    {
-
-        if (strcmp((char *)(pBuffer + sizeof(int) * 3), (maximo + *(int *)(pBuffer +
-        sizeof(int) * 2))->nome) == 0)
+        Celula *celula = *pIni;
+        while ((celula != NULL) && (strcmp((char *)(pBuffer + sizeof(int)), celula->infos.nome) != 0))
         {
-            printf("\n\tNome: %s\tIdade: %d\tTelefone: %s\n", (maximo + *(int *)(pBuffer + sizeof(int) * 2))->nome,
-            (maximo + *(int *)(pBuffer + sizeof(int) * 2))->idade, (maximo + *(int *)(pBuffer +
-            sizeof(int) * 2))->telefone);
-            return pBuffer;
+            celula = celula->proximo;
+        }
+        if (celula == NULL)
+        {
+            printf("\n\tErro na busca: nome não encontrado.\n");
+        }
+        else
+        {
+            printf("\n\tNome: %s", celula->infos.nome);
+            printf("\tIdade: %d", celula->infos.idade);
+            printf("\tTelefone: %s\n", celula->infos.telefone);
         }
     }
-
-    printf("\nNome não encontrado\n");
-    return pBuffer;
 }
 
-void listar(void *pBuffer)
-{ //semelhante à função buscar, lista todas as células de todos
-    //indivíduos
-
-    if ((pBuffer + sizeof(int)) == 0)
+void listar(Lista *pIni)
+{
+    if (pIni != NULL)
     {
-        printf("\nNenhum nome cadastrado\n");
-        return;
-    }
-
-    printf("\nPessoas cadastradas: %d\n\n", *(int *)(pBuffer + sizeof(int)));
-
-    for (*(int *)(pBuffer + sizeof(int) * 2) = 0; *(int *)(pBuffer + sizeof(int) * 2) <
-    *(int *)(pBuffer + sizeof(int)); *(int *)(pBuffer + sizeof(int) * 2) =
-    *(int *)(pBuffer + sizeof(int) * 2) + 1)
-    {
-        printf("\n\tIndivíduo %d\tNome: %s\tIdade: %d\tTelefone: %s\n", *(int *)(pBuffer +
-        sizeof(int) * 2), (maximo + *(int *)(pBuffer + sizeof(int) * 2))->nome, (maximo
-        + *(int *)(pBuffer + sizeof(int) * 2))->idade, (maximo + *(int *)(pBuffer +
-        sizeof(int) * 2))->telefone);
+        Celula *celula = *pIni;
+        while (celula != NULL)
+        {
+            printf("\n\tNome: %s", celula->infos.nome);
+            printf("\tIdade: %d", celula->infos.idade);
+            printf("\tTelefone: %s\n", celula->infos.telefone);
+            celula = celula->proximo;
+        }
     }
 }
