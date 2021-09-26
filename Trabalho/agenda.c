@@ -201,6 +201,7 @@ void limparLista(void *pBuffer, void *listaPessoas)
         pBuffer = aux;
     }
     free(aux);
+    
     printf("\nLista limpa com sucesso.\n");
 
     return;
@@ -244,8 +245,8 @@ int main(){
             break;
         case 5:
             limparLista(pBuffer, listaPessoas);
-            free(listaPessoas);
             free(pBuffer);
+            free(listaPessoas);
             exit(0);
             break;
         default:
