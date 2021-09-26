@@ -126,7 +126,7 @@ void buscarPessoa(void *pBuffer, void *listaPessoas)
     }
 
     printf("\nInforme o nome que deseja buscar: ");
-    scanf("%[^\n]%*c", (char *)(pBuffer + NOME));
+    scanf("%19[^\n]%*c", (char *)(pBuffer + NOME));
 
     void *aux = (pBuffer + NOME);
 
@@ -146,11 +146,9 @@ void buscarPessoa(void *pBuffer, void *listaPessoas)
     return;
 }
 
-void apagarIndividuo(void *pBuffer, void *listaPessoas)
-{
+void apagarIndividuo(void *pBuffer, void *listaPessoas){
 
     void *aux;
-    void *nome = calloc(1, sizeof(char) * 20);
 
     if (*(int *)listaPessoas == 0){
         printf("\nNinguém foi cadastrado ainda.\n");
@@ -158,7 +156,9 @@ void apagarIndividuo(void *pBuffer, void *listaPessoas)
     }
 
     printf("\nIndivíduo a ser removido: ");
-    scanf("%19[^\n]%*c", (char *)nome);
+    scanf("%19[^\n]%*c", (char *)(pBuffer + NOME));
+    
+    void *nome = (char *)(pBuffer + NOME);
 
     pBuffer = *(void **)(listaPessoas + PRIMEIRO);
     do{
@@ -179,7 +179,7 @@ void apagarIndividuo(void *pBuffer, void *listaPessoas)
             *(int *)listaPessoas -= 1;
 
             free(pBuffer);
-            free(nome);
+            
             printf("\nIndivíduo removido com sucesso.\n");
             return;
         }
