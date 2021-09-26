@@ -1,7 +1,7 @@
 # Trabalho-Agenda
-Name: Gustavo Henrique Roos<br>
-Registration: 20101184<br>
-Email: ghroos@inf.ufpel.edu.br<br>
+Name: Gustavo Henrique Roos;<br>
+Registration: 20101184;<br>
+Email: ghroos@inf.ufpel.edu.br;<br>
 Performed activities: "Trabalho: Agenda" from AED-I;<br>
 agenda.c is the source code;<br>
 entrada.txt is the entries used in valgrind.txt;<br>
