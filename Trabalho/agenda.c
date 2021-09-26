@@ -18,12 +18,10 @@
 #define AUX (sizeof(void **))
 #define NOME (sizeof(void **) + sizeof(int))
 
-int menu(void *pBuffer)
-{
+int menu(void *pBuffer){
     *(int *)(pBuffer + AUX) = 0;
 
-    while (*(int *)(pBuffer + AUX) < 1 || *(int *)(pBuffer + AUX) > 5)
-    {
+    while (*(int *)(pBuffer + AUX) < 1 || *(int *)(pBuffer + AUX) > 5){
         printf("\n---------MENU---------\n");
         printf("\n1- Incluir\n2- Buscar\n3- Listar\n4- Apagar\n5- Sair\n\nEscolha uma opcao: ");
         scanf("%d", &*(int *)(pBuffer + AUX));
@@ -33,13 +31,12 @@ int menu(void *pBuffer)
     return *(int *)(pBuffer + AUX);
 }
 
-void adicionarPessoa(void *pBuffer, void *listaPessoas)
-{
+void adicionarPessoa(void *pBuffer, void *listaPessoas){
+
     void *tracer;
     void *novaPessoa = (void *)malloc(TAM_PESSOA);
 
-    if (!novaPessoa)
-    {
+    if (!novaPessoa){
         printf("\nErro ao alocar memória para novaPessoa\n");
         return;
     }
@@ -57,11 +54,9 @@ void adicionarPessoa(void *pBuffer, void *listaPessoas)
     *(void **)(novaPessoa + ANTERIOR) = NULL;
     *(void **)(novaPessoa + PROXIMO) = NULL;
 
-    if (*(int *)listaPessoas == 0)
-    {
+    if (*(int *)listaPessoas == 0){
         *(void **)(listaPessoas + ULTIMO) = novaPessoa;
         *(void **)(listaPessoas + PRIMEIRO) = novaPessoa;
-
         *(int *)listaPessoas += 1;
 
         return;
@@ -69,23 +64,19 @@ void adicionarPessoa(void *pBuffer, void *listaPessoas)
 
     pBuffer = *(void **)(listaPessoas + PRIMEIRO);
 
-    do
-    {
-        if (strcmp((char *)novaPessoa, (char *)pBuffer) < 0)
-        {
+    do{
+        if (strcmp((char *)novaPessoa, (char *)pBuffer) < 0){
 
             *(void **)(novaPessoa + ANTERIOR) = *(void **)(pBuffer + ANTERIOR);
             *(void **)(novaPessoa + PROXIMO) = pBuffer;
 
-            if (*(int *)listaPessoas > 1 && *(void **)(pBuffer + ANTERIOR) != NULL)
-            {
+            if (*(int *)listaPessoas > 1 && *(void **)(pBuffer + ANTERIOR) != NULL){
                 tracer = *(void **)(pBuffer + ANTERIOR);
                 *(void **)(tracer + PROXIMO) = novaPessoa;
             }
             *(void **)(pBuffer + ANTERIOR) = novaPessoa;
 
-            if (*(void **)(novaPessoa + ANTERIOR) == NULL)
-            {
+            if (*(void **)(novaPessoa + ANTERIOR) == NULL){
                 *(void **)(listaPessoas + PRIMEIRO) = novaPessoa;
             }
 
@@ -93,8 +84,7 @@ void adicionarPessoa(void *pBuffer, void *listaPessoas)
             return;
         }
 
-        if (*(void **)(pBuffer + PROXIMO) == NULL)
-        {
+        if (*(void **)(pBuffer + PROXIMO) == NULL){
             break;
         }
         pBuffer = *(void **)(pBuffer + PROXIMO);
@@ -110,18 +100,16 @@ void adicionarPessoa(void *pBuffer, void *listaPessoas)
 
 void listarTodas(void *pBuffer, void *listaPessoas)
 {
-    if (*(int *)listaPessoas == 0)
-    {
+    if (*(int *)listaPessoas == 0){
         printf("\nNinguém foi cadastrado ainda.\n");
         return;
     }
 
     pBuffer = *(void **)(listaPessoas + PRIMEIRO);
 
-    printf("CADASTROS ENCONTRADOS: %d\n", *(int *)listaPessoas);
+    printf("\nCADASTROS ENCONTRADOS: %d\n", *(int *)listaPessoas);
 
-    do
-    {
+    do{
         printf("\n------------------\n\nEndereço do indivíduo: %p\nNome: %s\nIdade: %s\nTelefone: %s\n\n",
                pBuffer, (char *)pBuffer, (char *)(pBuffer + IDADE), (char *)(pBuffer + TELEFONE));
         pBuffer = *(void **)(pBuffer + PROXIMO);
@@ -132,8 +120,7 @@ void listarTodas(void *pBuffer, void *listaPessoas)
 
 void buscarPessoa(void *pBuffer, void *listaPessoas)
 {
-    if (*(int *)listaPessoas == 0)
-    {
+    if (*(int *)listaPessoas == 0){
         printf("\nNinguém foi cadastrado ainda.\n");
         return;
     }
@@ -145,21 +132,16 @@ void buscarPessoa(void *pBuffer, void *listaPessoas)
 
     pBuffer = *(void **)(listaPessoas + PRIMEIRO);
 
-    while (pBuffer != NULL)
-    {
-        if (strcmp((char *)aux, pBuffer) == 0)
-        {
+    while (pBuffer != NULL){
+        if (strcmp((char *)aux, pBuffer) == 0){
             printf("\n------------------\n\nEndereço do indivíduo: %p\nNome: %s\nIdade: %s\nTelefone: %s\n------------------\n",
                    pBuffer, (char *)pBuffer, (char *)(pBuffer + IDADE), (char *)(pBuffer + TELEFONE));
             return;
-        }
-        else
-        {
+        } else{
             pBuffer = *(void **)(pBuffer + PROXIMO);
         }
     }
-
-    printf("\nNome nao encontrado!\n");
+    printf("\nNome nao encontrado.\n");
 
     return;
 }
@@ -170,8 +152,7 @@ void apagarIndividuo(void *pBuffer, void *listaPessoas)
     void *aux;
     void *nome = calloc(1, sizeof(char) * 20);
 
-    if (*(int *)listaPessoas == 0)
-    {
+    if (*(int *)listaPessoas == 0){
         printf("\nNinguém foi cadastrado ainda.\n");
         return;
     }
@@ -180,37 +161,28 @@ void apagarIndividuo(void *pBuffer, void *listaPessoas)
     scanf("%19[^\n]%*c", (char *)nome);
 
     pBuffer = *(void **)(listaPessoas + PRIMEIRO);
-    do
-    {
-        if (strcmp((char *)pBuffer, (char *)nome) == 0)
-        {
-
-            if (*(void **)(pBuffer + ANTERIOR) != NULL)
-            {
+    do{
+        if (strcmp((char *)pBuffer, (char *)nome) == 0){
+            if (*(void **)(pBuffer + ANTERIOR) != NULL){
                 aux = *(void **)(pBuffer + ANTERIOR);
                 *(void **)(aux + PROXIMO) = *(void **)(pBuffer + PROXIMO);
-            }
-            else
-            {
+            } else{
                 *(void **)(listaPessoas + PRIMEIRO) = *(void **)(pBuffer + PRIMEIRO);
             }
-
-            if (*(void **)(pBuffer + PROXIMO) != NULL)
-            {
+            if (*(void **)(pBuffer + PROXIMO) != NULL){
                 aux = *(void **)(pBuffer + PROXIMO);
                 *(void **)(aux + ANTERIOR) = *(void **)(pBuffer + ANTERIOR);
-            }
-            else
-            {
+            } else{
                 *(void **)(listaPessoas + ULTIMO) = *(void **)(pBuffer + ANTERIOR);
             }
 
             *(int *)listaPessoas -= 1;
+
             free(pBuffer);
             free(nome);
+            printf("\nIndivíduo removido com sucesso.\n");
             return;
         }
-
         pBuffer = *(void **)(pBuffer + PROXIMO);
     } while (pBuffer != NULL);
 
@@ -223,31 +195,29 @@ void limparLista(void *pBuffer, void *listaPessoas)
     void *aux;
     pBuffer = *(void **)(listaPessoas + PRIMEIRO);
 
-    while (pBuffer != NULL)
-    {
+    while (pBuffer != NULL){
         aux = *(void **)(pBuffer + PROXIMO);
         free(pBuffer);
         pBuffer = aux;
     }
     free(aux);
+    printf("\nLista limpa com sucesso.\n");
 
     return;
 }
 
-int main()
-{
+int main(){
+
     void *pBuffer = (void *)calloc(1, sizeof(void **) + sizeof(int) + MAX_NOME * sizeof(char));
 
-    if (!pBuffer)
-    {
-        printf("\nErro ao alocar memória para pBuffer\n");
+    if (!pBuffer){
+        printf("\nErro ao alocar memória para pBuffer.\n");
         return (-1);
     }
     void *listaPessoas = (void *)calloc(1, sizeof(int) + sizeof(void **) * 2);
 
-    if (!listaPessoas)
-    {
-        printf("\nErro ao alocar memória para ListaPessoas\n");
+    if (!listaPessoas){
+        printf("\nErro ao alocar memória para ListaPessoas.\n");
         return (-1);
     }
 
@@ -256,12 +226,10 @@ int main()
     *(void **)(listaPessoas + PRIMEIRO) = NULL;
     *(void **)(listaPessoas + ULTIMO) = NULL;
 
-    for (;;)
-    {
+    for (;;){
         *(int *)(pBuffer + AUX) = menu(pBuffer);
 
-        switch (*(int *)(pBuffer + AUX))
-        {
+        switch (*(int *)(pBuffer + AUX)){
         case 1:
             adicionarPessoa(pBuffer, listaPessoas);
             break;
@@ -277,6 +245,7 @@ int main()
         case 5:
             limparLista(pBuffer, listaPessoas);
             free(listaPessoas);
+            free(pBuffer);
             exit(0);
             break;
         default:
