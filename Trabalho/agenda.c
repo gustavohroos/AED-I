@@ -170,7 +170,6 @@ void apagarIndividuo(void *pBuffer, void *listaPessoas)
     void *aux;
     void *nome = calloc(1, sizeof(char) * 20);
 
-    //if there is no one yet
     if (*(int *)listaPessoas == 0)
     {
         printf("\nNinguém foi cadastrado ainda.\n");
