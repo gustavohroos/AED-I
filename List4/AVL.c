@@ -6,14 +6,14 @@ struct Nodo *adicionar(struct Nodo *Nodo, int numero);
 struct Nodo *rotDir(struct Nodo *Nodo);
 struct Nodo *rotEsq(struct Nodo *Nodo);
 struct Nodo *novoNodo(int chave);
-void printarArvore(struct Nodo *Nodo);
-int maximo(int a, int b);
-int altura(struct Nodo *Nodo);
-int getFB(struct Nodo *Nodo);
 int verificar(struct Nodo *Nodo);
-void limparNodo(struct Nodo *Nodo);
+int altura(struct Nodo *Nodo);
+int maximo(int a, int b);
+int getFB(struct Nodo *Nodo);
 void limparArvore(struct Nodo *raiz);
+void printarArvore(struct Nodo *Nodo);
 void segundoCenario();
+void limparNodo(struct Nodo *Nodo);
 
 struct Nodo{
   int chave;
@@ -199,13 +199,13 @@ void segundoCenario(){
 
 int main(){
   struct Nodo *raiz = NULL;
-  int quantidade, numero;
+  int qtdNodos, numero;
 
-  printf("\nDigite a quantidade de nodos para inserir: ");
-  scanf("%d", &quantidade);
+  printf("\n-> Digite a quantidade de nodos para inserir: ");
+  scanf("%d", &qtdNodos);
 
   srand(time(0));
-  for (int i = 0; i < quantidade; i++){
+  for (int i = 0; i < qtdNodos; i++){
     numero = rand() % 100;
     raiz = adicionar(raiz, numero);
   }
