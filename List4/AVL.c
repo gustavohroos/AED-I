@@ -2,13 +2,12 @@
 #include <stdlib.h>
 #include <time.h>
 
-struct Nodo{
+typedef struct Nodo{
   int chave;
   int alturaNodo;
   struct Nodo *nEsq, *nDir;
-};
+} Nodo;
 
-typedef struct Nodo Nodo;
 
 Nodo *adicionar( Nodo *Nodo, int numero);
 Nodo *novoNodo(int chave);
@@ -29,15 +28,16 @@ int main(){
 
   printf("\n-> Digite a quantidade de nodos para inserir: ");
   scanf("%d", &qtdNodos);
+  printf("\n-> Arvore AVL com numeros randomicos:");
 
   srand(time(0));
   for (int i = 0; i < qtdNodos; i++){
     numero = rand() % 100;
     raiz = adicionar(raiz, numero);
   }
-  printf("\n\n");
-  printar(raiz);
   printf("\n");
+  printar(raiz);
+  printf("\n\n\n");
 
   limparArv(raiz);
   segundoCenario();
@@ -45,7 +45,7 @@ int main(){
   return 0;
 }
 
- Nodo *adicionar( Nodo *Nodo, int numero){
+Nodo *adicionar( Nodo *Nodo, int numero){
   int fb;
 
   if (Nodo == NULL){
@@ -81,7 +81,7 @@ int main(){
   return Nodo;
 }
 
- Nodo *rotDir(Nodo *Nodo){
+Nodo *rotDir(Nodo *Nodo){
   struct Nodo *auxEsq = Nodo->nEsq;
   struct Nodo *auxDir = auxEsq->nDir;
 
@@ -94,7 +94,7 @@ int main(){
   return auxEsq;
 }
 
- Nodo *rotEsq(Nodo *Nodo){
+Nodo *rotEsq(Nodo *Nodo){
 
   struct Nodo *auxDir = Nodo->nDir;
   struct Nodo *auxEsq = auxDir->nEsq;
@@ -148,12 +148,12 @@ int calcularFB(Nodo *Nodo){
 }
 
 Nodo *novoNodo(int chave){
-  Nodo *Nodo = (struct Nodo *)calloc(1, sizeof( Nodo));
-  Nodo->chave = chave;
-  Nodo->nEsq = NULL;
-  Nodo->nDir = NULL;
-  Nodo->alturaNodo = 1;
-  return Nodo;
+  Nodo *NodoAux = (Nodo *)calloc(1, sizeof(Nodo));
+  NodoAux->chave = chave;
+  NodoAux->nEsq = NULL;
+  NodoAux->nDir = NULL;
+  NodoAux->alturaNodo = 1;
+  return NodoAux;
 }
 
 void printar(Nodo *Nodo){
