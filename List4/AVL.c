@@ -2,10 +2,17 @@
 #include <stdlib.h>
 #include <time.h>
 
+struct Nodo{
+  int chave;
+  int altura;
+  struct Nodo *nEsq;
+  struct Nodo *nDir;
+};
+
 struct Nodo *adicionar(struct Nodo *Nodo, int numero);
-struct Nodo *rotDir(struct Nodo *Nodo);
-struct Nodo *rotEsq(struct Nodo *Nodo);
 struct Nodo *novoNodo(int chave);
+struct Nodo *girarDir(struct Nodo *Nodo);
+struct Nodo *girarEsq(struct Nodo *Nodo);
 int verificar(struct Nodo *Nodo);
 int altura(struct Nodo *Nodo);
 int maximo(int a, int b);
@@ -15,13 +22,6 @@ void printarArvore(struct Nodo *Nodo);
 void segundoCenario();
 void limparNodo(struct Nodo *Nodo);
 
-struct Nodo{
-  int chave;
-  struct Nodo *nodoEsq;
-  struct Nodo *nodoDir;
-  int altura;
-};
-
 struct Nodo *adicionar(struct Nodo *Nodo, int numero){
   int fb;
 
@@ -30,28 +30,28 @@ struct Nodo *adicionar(struct Nodo *Nodo, int numero){
   }
 
   if (numero < Nodo->chave){
-    Nodo->nodoEsq = adicionar(Nodo->nodoEsq, numero);
+    Nodo->nEsq = adicionar(Nodo->nEsq, numero);
   }
   else{
-    Nodo->nodoDir = adicionar(Nodo->nodoDir, numero);
+    Nodo->nDir = adicionar(Nodo->nDir, numero);
   }
 
-  Nodo->altura = 1 + maximo(altura(Nodo->nodoEsq), altura(Nodo->nodoDir));
+  Nodo->altura = 1 + maximo(altura(Nodo->nEsq), altura(Nodo->nDir));
 
   fb = getFB(Nodo);
 
-  if (fb > 1 && numero < Nodo->nodoEsq->chave){
+  if (fb > 1 && numero < Nodo->nEsq->chave){
     return rotDir(Nodo);
   }
-  if (fb < -1 && numero > Nodo->nodoDir->chave){
+  if (fb < -1 && numero > Nodo->nDir->chave){
     return rotEsq(Nodo);
   }
-  if (fb > 1 && numero > Nodo->nodoEsq->chave){
-    Nodo->nodoEsq = rotEsq(Nodo->nodoEsq);
+  if (fb > 1 && numero > Nodo->nEsq->chave){
+    Nodo->nEsq = rotEsq(Nodo->nEsq);
     return rotDir(Nodo);
   }
-  if (fb < -1 && numero < Nodo->nodoDir->chave){
-    Nodo->nodoDir = rotDir(Nodo->nodoDir);
+  if (fb < -1 && numero < Nodo->nDir->chave){
+    Nodo->nDir = rotDir(Nodo->nDir);
     return rotEsq(Nodo);
   }
 
@@ -59,27 +59,27 @@ struct Nodo *adicionar(struct Nodo *Nodo, int numero){
 }
 
 struct Nodo *rotDir(struct Nodo *Nodo){
-  struct Nodo *auxLeft = Nodo->nodoEsq;
-  struct Nodo *auxDir = auxLeft->nodoDir;
+  struct Nodo *auxLeft = Nodo->nEsq;
+  struct Nodo *auxDir = auxLeft->nDir;
 
-  auxLeft->nodoDir = Nodo;
-  Nodo->nodoEsq = auxDir;
+  auxLeft->nDir = Nodo;
+  Nodo->nEsq = auxDir;
  
-  Nodo->altura = maximo(altura(Nodo->nodoEsq), altura(Nodo->nodoDir)) + 1;
-  auxLeft->altura = maximo(altura(auxLeft->nodoEsq), altura(auxLeft->nodoDir)) + 1;
+  Nodo->altura = maximo(altura(Nodo->nEsq), altura(Nodo->nDir)) + 1;
+  auxLeft->altura = maximo(altura(auxLeft->nEsq), altura(auxLeft->nDir)) + 1;
 
   return auxLeft;
 }
 
 struct Nodo *rotEsq(struct Nodo *Nodo){
-  struct Nodo *auxDir = Nodo->nodoDir;
-  struct Nodo *auxLeft = auxDir->nodoEsq;
+  struct Nodo *auxDir = Nodo->nDir;
+  struct Nodo *auxLeft = auxDir->nEsq;
 
-  auxDir->nodoEsq = Nodo; 
-  Nodo->nodoDir = auxLeft;
+  auxDir->nEsq = Nodo; 
+  Nodo->nDir = auxLeft;
 
-  Nodo->altura = maximo(altura(Nodo->nodoEsq), altura(Nodo->nodoDir)) + 1;
-  auxDir->altura = maximo(altura(auxDir->nodoEsq), altura(auxDir->nodoDir)) + 1;
+  Nodo->altura = maximo(altura(Nodo->nEsq), altura(Nodo->nDir)) + 1;
+  auxDir->altura = maximo(altura(auxDir->nEsq), altura(auxDir->nDir)) + 1;
 
   return auxDir;
 }
@@ -90,10 +90,10 @@ int verificar(struct Nodo *Nodo){
   if (Nodo == NULL){
     return 1;
   }
-  if (!verificar(Nodo->nodoEsq)){
+  if (!verificar(Nodo->nEsq)){
     return 0;
   }
-  if (!verificar(Nodo->nodoDir)){
+  if (!verificar(Nodo->nDir)){
     return 0;
   }
   fb = getFB(Nodo);
@@ -120,14 +120,14 @@ int getFB(struct Nodo *Nodo){
   if (Nodo == NULL){
     return 0;
   }
-  return (altura(Nodo->nodoEsq) - altura(Nodo->nodoDir));
+  return (altura(Nodo->nEsq) - altura(Nodo->nDir));
 }
 
 struct Nodo *novoNodo(int chave){
   struct Nodo *Nodo = (struct Nodo *)calloc(1, sizeof(struct Nodo));
   Nodo->chave = chave;
-  Nodo->nodoEsq = NULL;
-  Nodo->nodoDir = NULL;
+  Nodo->nEsq = NULL;
+  Nodo->nDir = NULL;
   Nodo->altura = 1;
   return Nodo;
 }
@@ -135,16 +135,16 @@ struct Nodo *novoNodo(int chave){
 void printarArvore(struct Nodo *Nodo){
   if (Nodo != NULL){
     printf("(%d", Nodo->chave);
-    printarArvore(Nodo->nodoEsq);
-    printarArvore(Nodo->nodoDir);
+    printarArvore(Nodo->nEsq);
+    printarArvore(Nodo->nDir);
     printf(")");
   }
 }
 
 void limparNodo(struct Nodo *Nodo){
   if (Nodo != NULL){
-    limparNodo(Nodo->nodoEsq);
-    limparNodo(Nodo->nodoDir);
+    limparNodo(Nodo->nEsq);
+    limparNodo(Nodo->nDir);
     free(Nodo);
   }
 }
