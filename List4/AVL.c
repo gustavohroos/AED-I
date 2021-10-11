@@ -4,23 +4,47 @@
 
 struct Nodo{
   int chave;
-  int altura;
+  int alturaSub;
   struct Nodo *nEsq;
   struct Nodo *nDir;
 };
 
+// typedef struct Nodo Nodo;
+
 struct Nodo *adicionar(struct Nodo *Nodo, int numero);
 struct Nodo *novoNodo(int chave);
-struct Nodo *girarDir(struct Nodo *Nodo);
-struct Nodo *girarEsq(struct Nodo *Nodo);
+struct Nodo *rotDir(struct Nodo *Nodo);
+struct Nodo *rotEsq(struct Nodo *Nodo);
 int verificar(struct Nodo *Nodo);
-int altura(struct Nodo *Nodo);
+int alturaSub(struct Nodo *Nodo);
 int maximo(int a, int b);
-int getFB(struct Nodo *Nodo);
-void limparArvore(struct Nodo *raiz);
-void printarArvore(struct Nodo *Nodo);
+int calcularFB(struct Nodo *Nodo);
+void limparArv(struct Nodo *raiz);
+void printArv(struct Nodo *Nodo);
 void segundoCenario();
 void limparNodo(struct Nodo *Nodo);
+
+int main(){
+  struct Nodo *raiz = NULL;
+  int qtdNodos, numero;
+
+  printf("\n-> Digite a quantidade de nodos para inserir: ");
+  scanf("%d", &qtdNodos);
+
+  srand(time(0));
+  for (int i = 0; i < qtdNodos; i++){
+    numero = rand() % 100;
+    raiz = adicionar(raiz, numero);
+  }
+  printf("\n\n");
+  printArv(raiz);
+  printf("\n");
+
+  limparArv(raiz);
+  segundoCenario();
+
+  return 0;
+}
 
 struct Nodo *adicionar(struct Nodo *Nodo, int numero){
   int fb;
@@ -36,9 +60,9 @@ struct Nodo *adicionar(struct Nodo *Nodo, int numero){
     Nodo->nDir = adicionar(Nodo->nDir, numero);
   }
 
-  Nodo->altura = 1 + maximo(altura(Nodo->nEsq), altura(Nodo->nDir));
+  Nodo->alturaSub = 1 + maximo(alturaSub(Nodo->nEsq), alturaSub(Nodo->nDir));
 
-  fb = getFB(Nodo);
+  fb = calcularFB(Nodo);
 
   if (fb > 1 && numero < Nodo->nEsq->chave){
     return rotDir(Nodo);
@@ -65,8 +89,8 @@ struct Nodo *rotDir(struct Nodo *Nodo){
   auxLeft->nDir = Nodo;
   Nodo->nEsq = auxDir;
  
-  Nodo->altura = maximo(altura(Nodo->nEsq), altura(Nodo->nDir)) + 1;
-  auxLeft->altura = maximo(altura(auxLeft->nEsq), altura(auxLeft->nDir)) + 1;
+  Nodo->alturaSub = maximo(alturaSub(Nodo->nEsq), alturaSub(Nodo->nDir)) + 1;
+  auxLeft->alturaSub = maximo(alturaSub(auxLeft->nEsq), alturaSub(auxLeft->nDir)) + 1;
 
   return auxLeft;
 }
@@ -78,8 +102,8 @@ struct Nodo *rotEsq(struct Nodo *Nodo){
   auxDir->nEsq = Nodo; 
   Nodo->nDir = auxLeft;
 
-  Nodo->altura = maximo(altura(Nodo->nEsq), altura(Nodo->nDir)) + 1;
-  auxDir->altura = maximo(altura(auxDir->nEsq), altura(auxDir->nDir)) + 1;
+  Nodo->alturaSub = maximo(alturaSub(Nodo->nEsq), alturaSub(Nodo->nDir)) + 1;
+  auxDir->alturaSub = maximo(alturaSub(auxDir->nEsq), alturaSub(auxDir->nDir)) + 1;
 
   return auxDir;
 }
@@ -96,7 +120,7 @@ int verificar(struct Nodo *Nodo){
   if (!verificar(Nodo->nDir)){
     return 0;
   }
-  fb = getFB(Nodo);
+  fb = calcularFB(Nodo);
   if ((fb > 1) || (fb < -1)){
     return 0;
   }
@@ -105,22 +129,22 @@ int verificar(struct Nodo *Nodo){
   }
 }
 
-int altura(struct Nodo *Nodo){
+int alturaSub(struct Nodo *Nodo){
   if (Nodo == NULL){
     return 0;
   }
-  return Nodo->altura;
+  return Nodo->alturaSub;
 }
 
 int maximo(int a, int b){
   return (a > b) ? a : b;
 }
 
-int getFB(struct Nodo *Nodo){
+int calcularFB(struct Nodo *Nodo){
   if (Nodo == NULL){
     return 0;
   }
-  return (altura(Nodo->nEsq) - altura(Nodo->nDir));
+  return (alturaSub(Nodo->nEsq) - alturaSub(Nodo->nDir));
 }
 
 struct Nodo *novoNodo(int chave){
@@ -128,15 +152,15 @@ struct Nodo *novoNodo(int chave){
   Nodo->chave = chave;
   Nodo->nEsq = NULL;
   Nodo->nDir = NULL;
-  Nodo->altura = 1;
+  Nodo->alturaSub = 1;
   return Nodo;
 }
 
-void printarArvore(struct Nodo *Nodo){
+void printArv(struct Nodo *Nodo){
   if (Nodo != NULL){
     printf("(%d", Nodo->chave);
-    printarArvore(Nodo->nEsq);
-    printarArvore(Nodo->nDir);
+    printArv(Nodo->nEsq);
+    printArv(Nodo->nDir);
     printf(")");
   }
 }
@@ -149,7 +173,7 @@ void limparNodo(struct Nodo *Nodo){
   }
 }
 
-void limparArvore(struct Nodo *raiz){
+void limparArv(struct Nodo *raiz){
   if (raiz != NULL){
     limparNodo(raiz);
   }
@@ -162,8 +186,8 @@ void segundoCenario(){
   raiz1 = adicionar(raiz1, 20);
   raiz1 = adicionar(raiz1, 4);
   raiz1 = adicionar(raiz1, 15);
-  printarArvore(raiz1);
-  limparArvore(raiz1);
+  printArv(raiz1);
+  limparArv(raiz1);
 
   printf("\nSegundo caso: \n");
   struct Nodo *raiz2 = NULL;
@@ -174,8 +198,8 @@ void segundoCenario(){
   raiz2 = adicionar(raiz2, 3);
   raiz2 = adicionar(raiz2, 9);
   raiz2 = adicionar(raiz2, 15);
-  printarArvore(raiz2);
-  limparArvore(raiz2);
+  printArv(raiz2);
+  limparArv(raiz2);
 
   printf("\nTerceiro caso: \n");
   struct Nodo *raiz3 = NULL;
@@ -191,35 +215,9 @@ void segundoCenario(){
   raiz3 = adicionar(raiz3, 7);
   raiz3 = adicionar(raiz3, 11);
   raiz3 = adicionar(raiz3, 15);
-  printarArvore(raiz3);
-  limparArvore(raiz3);
+  printArv(raiz3);
+  limparArv(raiz3);
 
   printf("\n\n");
 }
 
-int main(){
-  struct Nodo *raiz = NULL;
-  int qtdNodos, numero;
-
-  printf("\n-> Digite a quantidade de nodos para inserir: ");
-  scanf("%d", &qtdNodos);
-
-  srand(time(0));
-  for (int i = 0; i < qtdNodos; i++){
-    numero = rand() % 100;
-    raiz = adicionar(raiz, numero);
-  }
-  printf("\n\n");
-  printarArvore(raiz);
-  printf("\n");
-
-  if (verificar(raiz) == 0){
-    printf("Não ");
-  }
-  printf("OK\n\n");
-
-  limparArvore(raiz);
-  segundoCenario();
-
-  return 0;
-}
