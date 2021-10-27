@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <time.h> //clock(), CLOCKS_PER_SEC e clock_t
 
 void insertionSort(int *vetor, int n);
@@ -14,35 +13,30 @@ void swap(int *primeiro, int *segundo);
 
 int main(){
     int *vetorInicial, *vetorInsertionSort, *vetorSelectionSort, *vetorMergeSort,
-    *vetorQuicksort;
+    *vetorQuickSort;
     int n;
     clock_t t;
 
     printf("Digite o valor de n (tamanho do vetor): ");
     scanf("%d", &n);
 
-
-    vetorInicial = (int *)malloc(sizeof(int) * n);
-    vetorInsertionSort = (int *)malloc(sizeof(int) * n);
-    vetorSelectionSort = (int *)malloc(sizeof(int) * n);
-    vetorMergeSort = (int *)malloc(sizeof(int) * n);
-    vetorQuicksort = (int *)malloc(sizeof(int) * n);
+    vetorInsertionSort = (int *)calloc(sizeof(int), n);
+    vetorSelectionSort = (int *)calloc(sizeof(int), n);
+    vetorMergeSort = (int *)calloc(sizeof(int), n);
+    vetorQuickSort = (int *)calloc(sizeof(int), n);
 
     srand(time(NULL));
 
     for(int i = 0; i < n; i++){
-        vetorInicial[i] = rand() % 100;
-        vetorInsertionSort[i] = vetorInicial[i];
-        vetorSelectionSort[i] = vetorInicial[i];
-        vetorMergeSort[i] = vetorInicial[i];
-        vetorQuicksort[i] = vetorInicial[i];
+        vetorInsertionSort[i] = rand() % 100;;
+        vetorSelectionSort[i] = vetorInsertionSort[i];
+        vetorMergeSort[i] = vetorInsertionSort[i];
+        vetorQuickSort[i] = vetorInsertionSort[i];
     }
-
-    verificar(vetorInicial, n);
 
     if(n <= 100){
         printf("Vetor: ");
-        printarVetor(vetorInicial, n);
+        printarVetor(vetorInsertionSort, n);
     }
     
     //Insertion sort
@@ -51,7 +45,7 @@ int main(){
     t = clock() - t; //tempo final - tempo inicial
     printf("\nTempo gasto Insertion Sort: %.8lf milissegundos\n", ((double)t)/((CLOCKS_PER_SEC)/1000));
     verificar(vetorInsertionSort, n);
-    
+    free(vetorInsertionSort);
 
     //Selection sort
     t = clock(); //armazena tempo
@@ -59,13 +53,15 @@ int main(){
     t = clock() - t; //tempo final - tempo inicial
     printf("\nTempo gasto Selection Sort: %.8lf milissegundos\n", ((double)t)/((CLOCKS_PER_SEC)/1000));
     verificar(vetorSelectionSort, n);
+    free(vetorSelectionSort);
 
     //Quick sort
     t = clock(); //armazena tempo
-    quickSort(vetorQuicksort, 0, (n - 1));
+    quickSort(vetorQuickSort, 0, (n - 1));
     t = clock() - t; //tempo final - tempo inicial
     printf("\nTempo gasto Quick Sort: %.8lf milissegundos\n", ((double)t)/((CLOCKS_PER_SEC)/1000));
-    verificar(vetorQuicksort, n);
+    verificar(vetorQuickSort, n);
+    free(vetorQuickSort);
 
     //Merge sort
     t = clock(); //armazena tempo
@@ -73,13 +69,7 @@ int main(){
     t = clock() - t; //tempo final - tempo inicial
     printf("\nTempo gasto Merge Sort: %.8lf milissegundos\n", ((double)t)/((CLOCKS_PER_SEC)/1000));
     verificar(vetorMergeSort, n);
-
-    free(vetorInicial);
-	free(vetorInsertionSort);
-	free(vetorSelectionSort);
-	free(vetorMergeSort);
-	free(vetorQuicksort);
-
+    free(vetorMergeSort);
 	return 0;
 }
 
@@ -99,15 +89,14 @@ void printarVetor(int *vetor, int n){
 void verificar(int *vetor, int n){
 
     if(n > 1){
-        for(int i = 0; i < n; i++){
+        for(int i = 1; i < n; i++){
             if(vetor[i - 1] > vetor[i]){
                 printf("---------- Vetor não ordenado\n");
                 return;
             }
         }
-        printf("---------- Vetor está ordenado\n");
-        return;
     }
+    printf("---------- Vetor está ordenado\n");
 
 }
 
@@ -172,20 +161,12 @@ void quickSort(int *vetor, int inicio, int fim){
 
 }
 
-void swap(int *primeiro, int *segundo){ 
-    int aux = *primeiro;
-    *primeiro = *segundo;
-    *segundo = aux;
-}
-
-
 void mergeSort(int *vetor, int esquerda, int direita){
 
-    int pivo;
     if(esquerda < direita){
-        pivo = floor((esquerda + direita) / 2);
+        int pivo = (esquerda + (direita - esquerda) / 2);
         mergeSort(vetor, esquerda, pivo);
-        mergeSort(vetor, (pivo + 1), direita);
+        mergeSort(vetor, pivo + 1, direita);
         merge(vetor, esquerda, pivo, direita);
     }
 }
@@ -197,7 +178,8 @@ void merge(int *vetor, int esquerda, int pivo, int direita){
     tam = direita - esquerda + 1;
     auxEsquerda = esquerda;
     auxDireita = pivo + 1;
-    aux = (int *)malloc(sizeof(int) * tam);
+    aux = (int *)calloc(sizeof(int), tam);
+
     if(aux != NULL){
         for(int i = 0; i < tam; i++){
             if(!fim1 && !fim2){
@@ -228,4 +210,10 @@ void merge(int *vetor, int esquerda, int pivo, int direita){
         }
     }
     free(aux);
+}
+
+void swap(int *primeiro, int *segundo){ 
+    int aux = *primeiro;
+    *primeiro = *segundo;
+    *segundo = aux;
 }
