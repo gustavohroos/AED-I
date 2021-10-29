@@ -12,7 +12,7 @@ void verificar(int *vetor, int n);
 void swap(int *primeiro, int *segundo);
 
 int main(){
-    int *vetorInicial, *vetorInsertionSort, *vetorSelectionSort, *vetorMergeSort,
+    int *vetorInsertionSort, *vetorSelectionSort, *vetorMergeSort,
     *vetorQuickSort;
     int n;
     clock_t t;
@@ -28,7 +28,7 @@ int main(){
     srand(time(NULL));
 
     for(int i = 0; i < n; i++){
-        vetorInsertionSort[i] = rand() % 100;;
+        vetorInsertionSort[i] = rand() % 100;
         vetorSelectionSort[i] = vetorInsertionSort[i];
         vetorMergeSort[i] = vetorInsertionSort[i];
         vetorQuickSort[i] = vetorInsertionSort[i];
