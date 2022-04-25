@@ -1,0 +1,141 @@
+gustavo@gustavo-PC:~/Desktop/Estudo/AED-I/List2/Exercise7$ valgrind -s ./Exercise7 
+==47664== Memcheck, a memory error detector
+==47664== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==47664== Using Valgrind-3.17.0 and LibVEX; rerun with -h for copyright info
+==47664== Command: ./Exercise7
+==47664== 
+
+1 - Adicionar;
+2 - Remover;
+3 - Buscar;
+4 - Listar agenda;
+5 - Sair do programa.
+
+Escolha: 1
+
+Digite o nome: Gustavo
+Digite a idade: 19
+Digite o telefone: 17281728
+
+1 - Adicionar;
+2 - Remover;
+3 - Buscar;
+4 - Listar agenda;
+5 - Sair do programa.
+
+Escolha: 1
+
+Digite o nome: Rafael
+Digite a idade: 35
+Digite o telefone: 77788877
+
+1 - Adicionar;
+2 - Remover;
+3 - Buscar;
+4 - Listar agenda;
+5 - Sair do programa.
+
+Escolha: 1
+
+Digite o nome: Maria
+Digite a idade: 78
+Digite o telefone: 18236212
+
+1 - Adicionar;
+2 - Remover;
+3 - Buscar;
+4 - Listar agenda;
+5 - Sair do programa.
+
+Escolha: 1
+
+Digite o nome: Henrique
+Digite a idade: 89
+Digite o telefone: 66662222
+
+1 - Adicionar;
+2 - Remover;
+3 - Buscar;
+4 - Listar agenda;
+5 - Sair do programa.
+
+Escolha: 4
+
+Pessoas cadastradas: 4
+
+
+        Indivíduo 0     Nome: Gustavo   Idade: 19       Telefone: 17281728
+
+        Indivíduo 1     Nome: Rafael    Idade: 35       Telefone: 77788877
+
+        Indivíduo 2     Nome: Maria     Idade: 78       Telefone: 18236212
+
+        Indivíduo 3     Nome: Henrique  Idade: 89       Telefone: 66662222
+
+1 - Adicionar;
+2 - Remover;
+3 - Buscar;
+4 - Listar agenda;
+5 - Sair do programa.
+
+Escolha: 3
+
+Digite o nome da pessoa para buscar: Maria
+
+        Nome: Maria     Idade: 78       Telefone: 18236212
+
+1 - Adicionar;
+2 - Remover;
+3 - Buscar;
+4 - Listar agenda;
+5 - Sair do programa.
+
+Escolha: 2
+Digite o nome da pessoa para excluir: Maria
+
+
+
+1 - Adicionar;
+2 - Remover;
+3 - Buscar;
+4 - Listar agenda;
+5 - Sair do programa.
+
+Escolha: 3
+
+Digite o nome da pessoa para buscar: Maria
+
+Nome não encontrado
+
+1 - Adicionar;
+2 - Remover;
+3 - Buscar;
+4 - Listar agenda;
+5 - Sair do programa.
+
+Escolha: 4
+
+Pessoas cadastradas: 3
+
+
+        Indivíduo 0     Nome: Gustavo   Idade: 19       Telefone: 17281728
+
+        Indivíduo 1     Nome: Rafael    Idade: 35       Telefone: 77788877
+
+        Indivíduo 2     Nome: Henrique  Idade: 89       Telefone: 66662222
+
+1 - Adicionar;
+2 - Remover;
+3 - Buscar;
+4 - Listar agenda;
+5 - Sair do programa.
+
+Escolha: 5
+==47664== 
+==47664== HEAP SUMMARY:
+==47664==     in use at exit: 0 bytes in 0 blocks
+==47664==   total heap usage: 6 allocs, 6 frees, 2,170 bytes allocated
+==47664== 
+==47664== All heap blocks were freed -- no leaks are possible
+==47664== 
+==47664== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
