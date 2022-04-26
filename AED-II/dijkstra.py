@@ -7,13 +7,13 @@ from queue import PriorityQueue
 import numpy as np
 
 class Grafo:
-    def __init__(self, vertices):
+    def __init__(self, vertices: int):
         self.vertices = vertices
         self.grafo = np.zeros((self.vertices, self.vertices), dtype=int)
         self.width = 2
         self.visitado = []
     
-    def adiciona_aresta(self, u, v, peso):
+    def adiciona_aresta(self, u: int, v: int, peso: int):
         self.grafo[u][v] = self.grafo[v][u] = peso
 
     def mostra_matriz(self):
@@ -43,7 +43,7 @@ class Grafo:
         if self.vertices > 9:
             self.width -= 1
 
-    def adiciona_arestas(self, quantidade):
+    def adiciona_arestas(self, quantidade: int):
         for i in range(quantidade):
             origem = input(f'digite o vértice origem da aresta {i}: ')
             destino = input(f'digite o vértice destino da aresta {i}: ')
@@ -52,7 +52,7 @@ class Grafo:
             self.width = max(self.width, len(str(peso)))
             self.mostra_matriz()
     
-    def dijkstra(self, vertice):
+    def dijkstra(self, vertice: int) -> dict[int, float]:
         N = {v: np.inf for v in range(self.vertices)}
         N[vertice] = 0
 
@@ -79,6 +79,7 @@ class Grafo:
     def dijk(self):
         for vertice_origem in range(self.vertices):
             distancias = grafo.dijkstra(int(vertice_origem))
+            print('=-'*27)
             for vertice in range(len(distancias)):
                 if distancias[vertice] != np.inf:
                     print(f'A distância mínima do vértice {vertice_origem} para o vértice {vertice} é {distancias[vertice]}')

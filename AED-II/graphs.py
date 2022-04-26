@@ -36,9 +36,9 @@ class Grafo:
 
     def adiciona_arestas(self, quantidade):
         for i in range(quantidade):
-            origem = input(f'digite a origem do vértice {i+1}: ')
-            destino = input(f'digite o destino do vértice {i+1}: ')
-            peso = input(f'digite o peso do vértice {i+1}: ')
+            origem = input(f'digite a origem do aresta {i+1}: ')
+            destino = input(f'digite o destino do aresta {i+1}: ')
+            peso = input(f'digite o peso do aresta {i+1}: ')
             self.adiciona_aresta(int(origem), int(destino), int(peso))
             self.width = max(self.width, len(str(peso)))
             self.mostra_matriz()
